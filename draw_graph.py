@@ -7,6 +7,9 @@ import sys
 import math
 
 
+display_org = False
+display_gps = False
+
 
 args = sys.argv
 f = open(args[1], "r")
@@ -63,8 +66,9 @@ def calcAngle():
         mx = float(row[7]);
         my = float(row[8]);
         mz = float(row[9]);
-        direction.append(float(row[10]))
-        speed.append(float(row[11]))
+        if display_gps:
+            direction.append(float(row[10]))
+            speed.append(float(row[11]))
                    
         #ロール角
         if ay == 0.0 and az == 0.0:
@@ -148,31 +152,37 @@ plt.ylabel("[degree]")
 
 plt.subplot(3, 1, 1)
 plt.grid(True)
-plt.plot(t, roll, label="roll")
+if display_org:
+    plt.plot(t, roll, label="roll")
 plt.plot(t, soho_roll, label="soho_roll")
 plt.legend()
-spd = plt.twinx()
-spd.plot(t, speed, label="speed", color="r")
-spd.legend(loc='lower right')
+if display_gps:
+    spd = plt.twinx()
+    spd.plot(t, speed, label="speed", color="r")
+    spd.legend(loc='lower right')
 
 plt.subplot(3, 1, 2)
 plt.grid(True)
-plt.plot(t, pitch, label="roll")
+if display_org:
+    plt.plot(t, pitch, label="pitch")
 plt.plot(t, soho_pitch, label="soho_pitch")
 plt.legend()
-spd = plt.twinx()
-spd.plot(t, speed, label="speed", color="r")
-spd.legend(loc='lower right')
+if display_gps:
+    spd = plt.twinx()
+    spd.plot(t, speed, label="speed", color="r")
+    spd.legend(loc='lower right')
 
 plt.subplot(3, 1, 3)
 plt.grid(True)
 plt.plot(t, yaw, label="yaw")
-plt.plot(t, direction, label="direction")
+if display_gps:
+    plt.plot(t, direction, label="direction")
 #plt.plot(t, delta, label="delta")
 plt.legend()
-spd = plt.twinx()
-spd.plot(t, speed, label="speed", color="r")
-spd.legend(loc='lower right')
+if display_gps:
+    spd = plt.twinx()
+    spd.plot(t, speed, label="speed", color="r")
+    spd.legend(loc='lower right')
 
 '''
 fig = plt.figure(figsize=(18, 5))

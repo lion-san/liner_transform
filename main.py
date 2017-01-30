@@ -18,7 +18,7 @@ now_t = 0
 save_t = 9
 rem_t = 0
 
-save_interval = 10 #ms
+save_interval = 100 #ms
 
 prev_row = []
 out_row = []
@@ -26,19 +26,21 @@ out_row = []
 count = 0
 index = 0
 
-header = ['dt', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'mx', 'my', 'mz']
-csv_writer = csv.writer(open("out_"+ args[1], "w"),  lineterminator='\n')
-csv_writer.writerow(header)
-
-
+#Count row num
 f = open(args[1], "r")
 all_num = sum(1 for line in f)
 print("row = " + str(all_num))
 f.close
 
-csv_reader = csv.reader(open(args[1], "r"), delimiter=",", quotechar='"')
 
-print("xxxx = " + str(csv_reader.line_num))
+wf = open("out_"+ str(save_interval) + "ms_" + args[1], "w")
+header = ['dt', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'mx', 'my', 'mz']
+csv_writer = csv.writer(wf,  lineterminator='\n')
+csv_writer.writerow(header)
+
+rf = open(args[1], "r")
+csv_reader = csv.reader(rf, delimiter=",", quotechar='"')
+
 
 for row in csv_reader:
     
@@ -56,11 +58,11 @@ for row in csv_reader:
   #      rem_t = int(row[0])
 
     #ここから線形補完開始
-    now_t = now_t + int(row[0])
+    now_t = now_t + float(row[0])
 
     if now_t < save_interval:
         prev_row = row
-        rem_t += int(row[0])
+        rem_t += float(row[0])
         continue
     else:
         while save_t <= now_t:
@@ -94,7 +96,7 @@ for row in csv_reader:
     print(int(csv_reader.line_num / all_num * 100))
 
     
-csv_reader.close
-csv_writer.close
+rf.close()
+wf.close()
     
     
