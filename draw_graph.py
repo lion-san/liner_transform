@@ -148,12 +148,13 @@ calcAngle()
 
 #Generate Graph
 plt.figure(figsize=(18, 8), dpi=80, facecolor='w', edgecolor='k')
-plt.title("data")
+plt.title(args[1])
 plt.xlabel("t")
 plt.ylabel("[degree]")
 
 
 plt.subplot(3, 1, 1)
+plt.title(args[1])
 plt.grid(True)
 if display_org:
     plt.plot(t, roll, label="roll")
@@ -165,6 +166,7 @@ if display_gps:
     spd.legend(loc='lower right')
 
 plt.subplot(3, 1, 2)
+plt.title(args[1])
 plt.grid(True)
 if display_org:
     plt.plot(t, pitch, label="pitch")
@@ -176,6 +178,7 @@ if display_gps:
     spd.legend(loc='lower right')
 
 plt.subplot(3, 1, 3)
+plt.title(args[1])
 plt.grid(True)
 plt.plot(t, yaw, label="yaw")
 if display_gps:
