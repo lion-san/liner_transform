@@ -18,7 +18,7 @@ now_t = 0
 save_t = 9
 rem_t = 0
 
-save_interval = 100 #ms
+save_interval = 200 #ms
 
 prev_row = []
 out_row = []

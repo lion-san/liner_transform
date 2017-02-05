@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 #import numpy as np
@@ -8,11 +9,11 @@ import math
 
 
 display_org = False
-display_gps = False
+display_gps = True
 
 
 args = sys.argv
-f = open(args[1], "r")
+f = open(args[1], "r", encoding='utf-8', errors='ignore')
 all_num = sum(1 for line in f)
 print("row = " + str(all_num))
 f.close
@@ -23,6 +24,7 @@ pitch = []
 yaw = []
 direction = []
 speed = []
+time = []
 
 
 soho_roll = []
@@ -69,6 +71,7 @@ def calcAngle():
         if display_gps:
             direction.append(float(row[10]))
             speed.append(float(row[11]))
+            time.append(row[12])
                    
         #ロール角
         if ay == 0.0 and az == 0.0:
@@ -78,9 +81,9 @@ def calcAngle():
             
          #ピッチ角
         if ax == 0.0 and az == 0.0:
-            pitch.append(math.degrees(math.atan(ay / math.sqrt(0.000000001))))
+            pitch.append(math.degrees(math.atan(ay * -1 / math.sqrt(0.000000001))))
         else:
-            pitch.append(math.degrees(math.atan((ay / math.sqrt(pow(ax, 2) + pow(az, 2))))))
+            pitch.append(math.degrees(math.atan((ay * -1 / math.sqrt(pow(ax, 2) + pow(az, 2))))))
             
         
         #相補フィルター
