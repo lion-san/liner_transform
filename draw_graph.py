@@ -11,13 +11,25 @@ import math
 display_org = False
 display_gps = True
 
-
 args = sys.argv
+
 f = open(args[1], "r", encoding='utf-8', errors='ignore')
 all_num = sum(1 for line in f)
 print("row = " + str(all_num))
 f.close
 
+
+start_time = 0
+window_width = all_num
+
+limit = False
+if len(args) == 4:
+    start_time = float(args[2])
+    window_width = float(args[3])
+    limit = True
+print(len(args))
+print(start_time)
+print(window_width)
 t = []
 roll = []
 pitch = []
@@ -164,7 +176,9 @@ if display_gps:
     spd = plt.twinx()
     spd.plot(t, speed, label="speed", color="r")
     spd.legend(loc='lower right')
-
+if limit:
+    plt.xlim([start_time, start_time+window_width])
+    
 plt.subplot(3, 1, 2)
 plt.title(args[1])
 plt.grid(True)
@@ -176,6 +190,8 @@ if display_gps:
     spd = plt.twinx()
     spd.plot(t, speed, label="speed", color="r")
     spd.legend(loc='lower right')
+if limit:
+    plt.xlim([start_time, start_time+window_width])
 
 plt.subplot(3, 1, 3)
 plt.title(args[1])
@@ -189,7 +205,8 @@ if display_gps:
     spd = plt.twinx()
     spd.plot(t, speed, label="speed", color="r")
     spd.legend(loc='lower right')
-
+if limit:
+    plt.xlim([start_time, start_time+window_width])
 '''
 fig = plt.figure(figsize=(18, 5))
 ax = fig.add_subplot(1,1,1)
