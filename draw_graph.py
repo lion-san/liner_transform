@@ -46,6 +46,11 @@ SOHO_C = 18.0
 
 delta = []
 
+limited_soho_roll = []
+limited_soho_pitch = []
+
+
+
 #ロールのグラフ作成
 def calcAngle():
 
@@ -104,9 +109,17 @@ def calcAngle():
             #vector = math.sqrt(ax*ax + ay*ay + az*az)
             #print(str(ax) + ":" + str(ay) + ":" + str(az) + "===" + str(vector))
             #EA = 1 / math.pow(1 + math.pow(SOHO_C- SOHO_C*vector, 2), 2)
+            sr = SOHO_K*(soho_roll[count-3]+gx*dt/1000) + (1-SOHO_K)*roll[count-2]
+            sp = SOHO_K*(soho_pitch[count-3]+gy*dt/1000) + (1-SOHO_K)*pitch[count-2]
+            soho_roll.append(sr)
+            soho_pitch.append(sp)
 
-            soho_roll.append(SOHO_K*(soho_roll[count-3]+gx*dt/1000) + (1-SOHO_K)*roll[count-2])
-            soho_pitch.append(SOHO_K*(soho_pitch[count-3]+gy*dt/1000) + (1-SOHO_K)*pitch[count-2])
+            #散布図            
+            if start_time < prev_t and prev_t < start_time+window_width:
+                limited_soho_roll.append(sr)
+                limited_soho_pitch.append(sp)
+                                
+                
         else:
             #初期化
             soho_roll.append(roll[count-2])
@@ -157,7 +170,7 @@ def calcAngle():
 calcAngle()
 
         
-
+graph_num = 4
 #Generate Graph
 plt.figure(figsize=(18, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.title(args[1])
@@ -165,7 +178,7 @@ plt.xlabel("t")
 plt.ylabel("[degree]")
 
 
-plt.subplot(3, 1, 1)
+plt.subplot(graph_num, 1, 1)
 plt.title(args[1])
 plt.grid(True)
 if display_org:
@@ -179,7 +192,7 @@ if display_gps:
 if limit:
     plt.xlim([start_time, start_time+window_width])
     
-plt.subplot(3, 1, 2)
+plt.subplot(graph_num, 1, 2)
 plt.title(args[1])
 plt.grid(True)
 if display_org:
@@ -193,7 +206,7 @@ if display_gps:
 if limit:
     plt.xlim([start_time, start_time+window_width])
 
-plt.subplot(3, 1, 3)
+plt.subplot(graph_num, 1, 3)
 plt.title(args[1])
 plt.grid(True)
 plt.plot(t, yaw, label="yaw")
@@ -207,6 +220,18 @@ if display_gps:
     spd.legend(loc='lower right')
 if limit:
     plt.xlim([start_time, start_time+window_width])
+
+    
+plt.subplot(graph_num, 1, 4)
+plt.title(args[1])
+plt.grid(True)
+if limit:
+    plt.scatter(limited_soho_pitch, limited_soho_roll, alpha=0.1)
+else:
+    plt.scatter(soho_pitch, soho_roll, alpha=0.01)
+
+    
+
 '''
 fig = plt.figure(figsize=(18, 5))
 ax = fig.add_subplot(1,1,1)
