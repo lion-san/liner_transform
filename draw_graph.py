@@ -178,6 +178,7 @@ plt.xlabel("t")
 plt.ylabel("[degree]")
 
 
+### Roll #########################################
 plt.subplot(graph_num, 1, 1)
 plt.title(args[1])
 plt.grid(True)
@@ -191,7 +192,8 @@ if display_gps:
     spd.legend(loc='lower right')
 if limit:
     plt.xlim([start_time, start_time+window_width])
-    
+
+### Pitch #########################################    
 plt.subplot(graph_num, 1, 2)
 plt.title(args[1])
 plt.grid(True)
@@ -206,6 +208,7 @@ if display_gps:
 if limit:
     plt.xlim([start_time, start_time+window_width])
 
+### Yaw #########################################
 plt.subplot(graph_num, 1, 3)
 plt.title(args[1])
 plt.grid(True)
@@ -221,7 +224,7 @@ if display_gps:
 if limit:
     plt.xlim([start_time, start_time+window_width])
 
-    
+### Scatter #########################################
 plt.subplot(graph_num, 1, 4)
 plt.title(args[1])
 plt.grid(True)
