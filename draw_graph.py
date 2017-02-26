@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import csv
 import sys
 import math
+import numpy
 
 
 display_org = False
@@ -41,14 +42,14 @@ time = []
 
 soho_roll = []
 soho_pitch = []
-SOHO_K = 0.98
+SOHO_K = 0.95
 SOHO_C = 18.0
 
 delta = []
 
 limited_soho_roll = []
 limited_soho_pitch = []
-
+limited_yaw = []
 
 
 #ロールのグラフ作成
@@ -85,9 +86,10 @@ def calcAngle():
         mx = float(row[7]);
         my = float(row[8]);
         mz = float(row[9]);
+        now_speed = float(row[11]);
         if display_gps:
             direction.append(float(row[10]))
-            speed.append(float(row[11]))
+            speed.append(now_speed)
             time.append(row[12])
                    
         #ロール角
@@ -113,6 +115,7 @@ def calcAngle():
             sp = SOHO_K*(soho_pitch[count-3]+gy*dt/1000) + (1-SOHO_K)*pitch[count-2]
             soho_roll.append(sr)
             soho_pitch.append(sp)
+            
 
             #散布図            
             if start_time < prev_t and prev_t < start_time+window_width:
@@ -155,7 +158,10 @@ def calcAngle():
             elif(yaw[count-3] - heading) > 180:
                 heading = heading + 360
         '''
-        yaw.append(heading)                     
+        yaw.append(heading)
+
+        if now_speed > 5:
+            limited_yaw.append(heading)    
             
         
     
@@ -170,7 +176,7 @@ def calcAngle():
 calcAngle()
 
         
-graph_num = 4
+graph_num = 5
 #Generate Graph
 plt.figure(figsize=(18, 8), dpi=80, facecolor='w', edgecolor='k')
 plt.title(args[1])
@@ -233,7 +239,12 @@ if limit:
 else:
     plt.scatter(soho_pitch, soho_roll, alpha=0.01)
 
-    
+### Yaw Histogram #########################################
+#plt.subplot(graph_num, 1, 5, projection='polar')
+plt.subplot(graph_num, 1, 5, polar=True)
+plt.title(args[1])
+values,bins=numpy.histogram(limited_yaw,bins=20)
+plt.bar(left=bins[:-1],height=values,width=.7*3.14/20)
 
 '''
 fig = plt.figure(figsize=(18, 5))
