@@ -86,9 +86,19 @@ def calcAngle():
         mx = float(row[7]);
         my = float(row[8]);
         mz = float(row[9]);
+        now_direction = float(row[10])
         now_speed = float(row[11]);
+        #速度異常の削除
+        if now_speed > 100:
+            count -= 1
+            t.pop()
+            continue
+        if now_direction > 360:
+            count -= 1
+            t.pop()
+            continue
         if display_gps:
-            direction.append(float(row[10]))
+            direction.append(now_direction)
             speed.append(now_speed)
             time.append(row[12])
                    
@@ -140,6 +150,7 @@ def calcAngle():
      
         heading = heading * 180 / math.pi
         heading = heading + 6.6
+        
      
         #if (heading > 360):
         #    heading = heading - 360
