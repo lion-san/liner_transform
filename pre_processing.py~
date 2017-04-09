@@ -42,7 +42,6 @@ csv_writer.writerow(header)
 rf = open(args[1], "r", encoding='utf-8', errors='ignore')
 print('Now pre-processing')
 buf=[]
-'''
 for hoge in rf:
     tmp = re.sub(r',', "z", hoge)
     tmp = re.sub(r'\.', "x", tmp)
@@ -54,11 +53,10 @@ for hoge in rf:
     #print(hoge)
     #print(tmp)
     buf.append(tmp)
-'''
 
 
-csv_reader = csv.reader(rf, delimiter=",", quotechar='"')
-#csv_reader = csv.reader(buf, delimiter=",", quotechar='"')
+#csv_reader = csv.reader(rf, delimiter=",", quotechar='"')
+csv_reader = csv.reader(buf, delimiter=",", quotechar='"')
 
 
 speed = 0
